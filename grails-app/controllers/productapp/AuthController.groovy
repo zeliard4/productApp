@@ -18,4 +18,7 @@ class AuthController {
             if (params.fail == 'true') { flash.message = "Invalid login" }
             render view:"login"} }
 
+    @Secured(['permitAll'])
+    def logout(){ redirect uri: SpringSecurityUtils.securityConfig.logout.filterProcessesUrl }
+
 }

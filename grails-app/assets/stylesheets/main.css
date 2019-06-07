@@ -63,6 +63,11 @@ img {
     border: 0;
 }
 
+/*.active, .btn:hover {*/
+    /*background-color: #666;*/
+    /**/
+/*}*/
+
 /* GENERAL */
 
 #grailsLogo a {

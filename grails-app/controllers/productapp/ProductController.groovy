@@ -26,7 +26,10 @@ class ProductController extends ExceptionHandlerController {
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def showProduct(Long id){
-        render view:'show', model:[ product : Product.get(id)] }
+        Product product = Product.get(id)
+        if (!product) listProducts()
+        else{
+            render view:'show', model:[ product : Product.get(id)] }}
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     // API methods

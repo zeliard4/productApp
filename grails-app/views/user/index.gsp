@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta name="layout" content="${gspLayout ?: 'main'}"/>
-        <title> ProductApp Login </title>
+        <title> ProductApp </title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 
         <style type="text/css" media="screen">
@@ -41,9 +41,9 @@
     <body>
 
         <ul class="nav nav-tabs" style="">
-            <li class="active"><a href="/admin/index">Home</a></li>
-            <li><a href="/product/listProducts">Products</a></li>
-            <li><a href="#">Create</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/user/index">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/product/listProducts">Products</a></li>
+            <li class="nav-item"><a class="nav-link" href="/auth/logout#">Logout</a></li>
         </ul>
 
 

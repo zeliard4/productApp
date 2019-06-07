@@ -11,9 +11,12 @@
     <body>
 
         <ul class="nav nav-tabs" style="">
-            <li class=""><a href="/">Home</a></li>
-            <li class=""><a href="/product/listProducts">Products</a></li>
-            <li class="active"><a href="/product/createProduct">Create</a></li>
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/product/listProducts">Products</a></li>
+            <sec:ifAllGranted roles='ROLE_ADMIN'>
+                <li class="active"><a href="/product/createProduct">Create</a></li>
+            </sec:ifAllGranted>
+            <li><a href="/auth/logout#">Logout</a></li>
         </ul>
 
         <g:render template="/alerts" model="[flash:flash]" />

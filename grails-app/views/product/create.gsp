@@ -9,9 +9,12 @@
     <body>
 
         <ul class="nav nav-tabs" style="">
-            <li class=""><a href="/">Home</a></li>
-            <li class=""><a href="/product/listProducts">Products</a></li>
-            <li class="active"><a href="/product/createProduct">Create</a></li>
+            <li class="nav-item"><a class="nav-link" href="/user/index">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/product/listProducts">Products</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/product/createProduct">Create</a></li>
+            <li class="nav-item"><a class="nav-link" href="/auth/logout#">Logout</a></li>
+
+
         </ul>
 
         <g:render template="/alerts" model="[flash:flash]" />
