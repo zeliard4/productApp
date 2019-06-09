@@ -1,17 +1,38 @@
 #!/usr/bin/env bash
 
-INFRASTRUCTURE_ROOTPATH=/var/productApp/grails-app/infrastructure
 
+APP_ROOTPATH=/var/productApp/
 DOCKER_PATH=$INFRASTRUCTURE_ROOTPATH/docker
+INFRASTRUCTURE_ROOTPATH=$GRAILS_PROJECT_ROOTPATH/infrastructure
 
+GRAILS_PROJECT_ROOTPATH=$APP_ROOTPATH/grails-app
 GRAILS_DOCKERPATH=$DOCKER_PATH/grails
 GRAILS_IMAGE_NAME=grails
 GRAILS_DOCKER_CONTAINER_NAME=grails
 
+TOMCAT_DOCKER_PATH=$DOCKER_PATH/tomcat
+
+APP_TARGET_WAR=$INFRASTRUCTURE_ROOTPATH/sources/war
+
+
+################################################################################################################################################
+## docker dependencies
+################################################################################################################################################
+app-dependencies(){
+    echo -e "\e[32m\nInstalling dependencies ... \e[39m\n"
+    apt-get purge docker lxc-docker docker-engine docker.io
+    apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+    curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable"
+    apt-get update
+    apt-get install docker-ce
+    echo -e "\n\e[32mInstalled dependencies!\e[39m\n"
+}
+
 ################################################################################################################################################
 ## Build Grails container image for war builds
 ################################################################################################################################################
-pi-backend-grails-build(){
+app-grails-build(){
     echo -e "\e[32m\nBuilding Grails image ... \e[39m\n"
     if ! docker build -t $GRAILS_IMAGE_NAME $GRAILS_DOCKERPATH
         then
@@ -22,28 +43,77 @@ pi-backend-grails-build(){
 }
 
 
-
-
 ################################################################################################################################################
 ## Deploys Grails container
 ################################################################################################################################################
-pi-backend-grails-deploy(){
+app-backend-grails-deploy(){
     pi-backend-grails-build
     pi-backend-grails-run
 }
 
 ################################################################################################################################################
-## Build grails backend war
+## Build Grails app war
 ################################################################################################################################################
-pi-backend-war-build(){
-    WAR_CMD="/root/.sdkman/candidates/grails/2.3.11/bin/grails war -Dgrails.env=${ENVIRONMENT,,} -Dapplication.config.credentials=$BACKEND_CREDENTIALS $BACKEND_TARGET_WAR/ROOT.war"
+app-grails-war-build(){
+    cd $APP_ROOTPATH
+    CLEAN_CMD="./gradlew clean"
+    $CLEAN_CMD
+    WAR_CMD="/root/.sdkman/candidates/grails/3.3.10/bin/grails prod war"
     echo -e "\e[32m\nRemoving backend war...\e[39m\n"
-    rm -rf $BACKEND_TARGET_WAR/*
-    cd $PI_BACKEND_ROOTPATH
+    rm -rf $APP_TARGET_WAR/*
     echo -e "\e[32m\nBuilding backend Grails war...\e[39m\n"
     $WAR_CMD
     echo -e "\e[32m\nBuilt backend Grails war.\e[39m\n"
 }
 
+################################################################################################################################################
+## Execute grails app war build command in grails container
+################################################################################################################################################
+app-grails-war-deploy(){
+    if ! docker exec -td grails bash -c "source /var/productApp/grails-app/infrastructure/infrastructure.sh; app-grails-war-build"
+        then
+            echo -e "\e[91m\nGrails backend war build failed!\n"
+            return
+    fi
+}
+
+################################################################################################################################################
+## Run grails container
+################################################################################################################################################
+app-grails-run(){
+    echo -e "\e[32m\nStopping Grails container...\e[39m\n"
+    docker rm -f $GRAILS_DOCKER_CONTAINER_NAME
+    echo -e "\e[32m\nRunning Grails container...\e[39m\n"
+
+    if ! docker run -td                             \
+        -v $APP_TARGET_WAR:$APP_TARGET_WAR          \
+        -v $APP_ROOTPATH:$APP_ROOTPATH              \
+        --name $GRAILS_DOCKER_CONTAINER_NAME        \
+        $GRAILS_IMAGE_NAME
+
+    then
+        echo -e "\e[91m\nGrails container launch failed!\n"
+        return
+    fi
+
+    echo -e "\e[32m\nGrails container started successfully.\e[39m\n"
+}
+
+
+
+################################################################################################################################################
+## Build tomcat image
+################################################################################################################################################
+app-tomcat-build(){
+
+    return
+}
+
 
 echo -e "\e[32m\nLoaded Infrastructure!\e[39m\n"
+
+
+
+
+
+
