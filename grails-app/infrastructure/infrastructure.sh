@@ -2,10 +2,10 @@
 
 
 APP_ROOTPATH=/var/productApp/
+GRAILS_PROJECT_ROOTPATH=$APP_ROOTPATH/grails-app
 DOCKER_PATH=$INFRASTRUCTURE_ROOTPATH/docker
 INFRASTRUCTURE_ROOTPATH=$GRAILS_PROJECT_ROOTPATH/infrastructure
 
-GRAILS_PROJECT_ROOTPATH=$APP_ROOTPATH/grails-app
 GRAILS_DOCKERPATH=$DOCKER_PATH/grails
 GRAILS_IMAGE_NAME=grails
 GRAILS_DOCKER_CONTAINER_NAME=grails
@@ -15,7 +15,7 @@ TOMCAT_IMAGE_NAME=tomcat
 TOMCAT_DOCKER_CONTAINER_NAME=tomcat
 
 APP_TARGET_WAR=$APP_ROOTPATH/build/libs/productApp-0.1.war
-TOMCAT_WAR_TARGET=/usr/local/tomcat/webapps/productApp.war
+TOMCAT_WAR_TARGET=/usr/local/tomcat/webapps/myapp/productApp.war
 TOMCAT_CONFIGPATH=$INFRASTRUCTURE_ROOTPATH/config/tomcat
 
 ################################################################################################################################################
@@ -72,6 +72,7 @@ app-grails-war-build(){
 ## Execute grails app war build command in grails container
 ################################################################################################################################################
 app-grails-war-deploy(){
+    cd $INFRASTRUCTURE_ROOTPATH
     if ! docker exec -ti grails bash -c "source /var/productApp/grails-app/infrastructure/infrastructure.sh; app-grails-war-build"
         then
             echo -e "\e[91m\nGrails war build failed!\n"
@@ -109,13 +110,14 @@ app-grails-run(){
 app-tomcat-build(){
     echo -e "\e[32m\nBuilding Tomcat image ... \e[39m\n"
     cp -rf $TOMCAT_CONFIGPATH $TOMCAT_DOCKERPATH/tmp
+    ls $TOMCAT_DOCKERPATH/tmp
     if ! docker build -t $TOMCAT_IMAGE_NAME $TOMCAT_DOCKERPATH
         then
             echo -e "\e[91m\nGrails image build failed!\n"
-            #rm -rf $TOMCAT_DOCKERPATH/tmp
+            rm -rf $TOMCAT_DOCKERPATH/tmp
             return
     fi
-    #rm -rf $TOMCAT_DOCKERPATH/tmp
+    rm -rf $TOMCAT_DOCKERPATH/tmp
     echo -e "\n\e[32mBuilt Tomcar image !\e[39m\n"
     return
 }
