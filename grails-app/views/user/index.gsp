@@ -47,7 +47,7 @@
         </ul>
 
 
-        <div style="padding-left:50px;padding-top:20px">
+        <div style="padding-left:50px;padding-top:20px;padding-bottom:40px">
             <h1> Hi there, User! </h1>
             <h2> This is the requested test app. </h2>
             <h3 style="padding-top:10px"> All stuff is loaded when application bootstraps, in a local h2 mem database. </h3>
@@ -55,18 +55,25 @@
             <h3> You can navigate through this minimal web-ui with the above navigation tabs. </h3>
             <br>
             <h2> It has been built with the following stack: </h2>
-            <ul class="col-md-4" style="font-size:18px" >
+            <ul class="col-md-8 col-xs-8" style="font-size:18px" >
                 <li class="">Grails 3.3.10</li>
                 <li class="">Groovy 2.4.17</li>
                 <li class="">OpenJdk 8</li>
                 <li class="">Intellij Idea 2017.1.5</li>
             </ul>
             <h2 style="padding-top:10px"> And plugins: </h2>
-            <ul class="col-md-4" style="font-size:18px" >
+            <ul class="col-md-8 col-xs-8" style="font-size:18px" >
                 <li class="">Jquery 3.3.1</li>
                 <li class="">Bootstrap 4.1.3</li>
                 <li class="">DataTables 1.10.19</li>
                 <li class="">Spring Security Core 3.2.3</li>
+            </ul>
+            <h2 style="padding-top:10px"> Infrastructure used: </h2>
+            <ul class="col-md-8 col-xs-8" style="font-size:18px" >
+                <li class="">Google Cloud virtual instance, one core 2GB of RAM running a Debian 9 stretch OS (free 300$ GCloud account)</li>
+                <li class="">Docker 18.09.6</li>
+                <li class="">Official Tomcat 7.0-jdk8 docker image</li>
+                <li class="">GitHub</li>
             </ul>
         </div>
     </body>
