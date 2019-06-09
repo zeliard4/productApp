@@ -84,7 +84,7 @@ app-grails-run(){
     docker rm -f $GRAILS_DOCKER_CONTAINER_NAME
     echo -e "\e[32m\nRunning Grails container...\e[39m\n"
 
-    if ! docker run -td                             \
+    if ! docker run -ti                             \
         -v $APP_TARGET_WAR:$APP_TARGET_WAR          \
         -v $APP_ROOTPATH:$APP_ROOTPATH              \
         --name $GRAILS_DOCKER_CONTAINER_NAME        \
