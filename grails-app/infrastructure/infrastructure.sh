@@ -10,10 +10,13 @@ GRAILS_DOCKERPATH=$DOCKER_PATH/grails
 GRAILS_IMAGE_NAME=grails
 GRAILS_DOCKER_CONTAINER_NAME=grails
 
-TOMCAT_DOCKER_PATH=$DOCKER_PATH/tomcat
+TOMCAT_DOCKERPATH=$DOCKER_PATH/tomcat
+TOMCAT_IMAGE_NAME=tomcat
+TOMCAT_DOCKER_CONTAINER_NAME=tomcat
 
-APP_TARGET_WAR=$INFRASTRUCTURE_ROOTPATH/sources/war
-
+APP_TARGET_WAR=$APP_ROOTPATH/build/libs/productApp-0.1.war
+TOMCAT_WAR_TARGET=/usr/local/tomcat/webapps/productApp.war
+TOMCAT_CONFIGPATH=$INFRASTRUCTURE_ROOTPATH/config/tomcat
 
 ################################################################################################################################################
 ## docker dependencies
@@ -104,9 +107,40 @@ app-grails-run(){
 ## Build tomcat image
 ################################################################################################################################################
 app-tomcat-build(){
-
+    echo -e "\e[32m\nBuilding Tomcat image ... \e[39m\n"
+    cp -rf $TOMCAT_CONFIGPATH $TOMCAT_DOCKERPATH/tmp
+    if ! docker build -t $TOMCAT_IMAGE_NAME $TOMCAT_DOCKERPATH
+        then
+            echo -e "\e[91m\nGrails image build failed!\n"
+            #rm -rf $TOMCAT_DOCKERPATH/tmp
+            return
+    fi
+    #rm -rf $TOMCAT_DOCKERPATH/tmp
+    echo -e "\n\e[32mBuilt Tomcar image !\e[39m\n"
     return
 }
+
+################################################################################################################################################
+## Run tomcat container
+################################################################################################################################################
+app-tomcat-run(){
+    echo -e "\e[32m\nStopping Tomcat container...\e[39m\n"
+    docker rm -f $TOMCAT_DOCKER_CONTAINER_NAME
+    echo -e "\e[32m\nRunning Tomcat container...\e[39m\n"
+
+    if ! docker run -td                                 \
+        -p 8080:8080                                    \
+        -v $APP_TARGET_WAR:$TOMCAT_WAR_TARGET           \
+        --name $TOMCAT_DOCKER_CONTAINER_NAME            \
+        $TOMCAT_IMAGE_NAME
+    then
+        echo -e "\e[91m\nTomcat container launch failed!\n"
+        return
+    fi
+
+    echo -e "\e[32m\nTomcat container started successfully.\e[39m\n"
+}
+
 
 
 echo -e "\e[32m\nLoaded Infrastructure!\e[39m\n"
