@@ -69,7 +69,7 @@ app-grails-war-build(){
 ## Execute grails app war build command in grails container
 ################################################################################################################################################
 app-grails-war-deploy(){
-    if ! docker exec -td grails bash -c "source /var/productApp/grails-app/infrastructure/infrastructure.sh; app-grails-war-build"
+    if ! docker exec -ti grails bash -c "source /var/productApp/grails-app/infrastructure/infrastructure.sh; app-grails-war-build"
         then
             echo -e "\e[91m\nGrails war build failed!\n"
             return
@@ -84,7 +84,7 @@ app-grails-run(){
     docker rm -f $GRAILS_DOCKER_CONTAINER_NAME
     echo -e "\e[32m\nRunning Grails container...\e[39m\n"
 
-    if ! docker run -ti                             \
+    if ! docker run -td                             \
         -v $APP_TARGET_WAR:$APP_TARGET_WAR          \
         -v $APP_ROOTPATH:$APP_ROOTPATH              \
         --name $GRAILS_DOCKER_CONTAINER_NAME        \
