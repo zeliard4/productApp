@@ -19,4 +19,4 @@ RUN update-alternatives --config java
 RUN curl -s get.sdkman.io | bash
 RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh; sdk install grails 3.3.10"
 
-WORKDIR /var/apps/productApp/infrastructure
+WORKDIR /var/productApp/
