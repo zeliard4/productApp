@@ -4,6 +4,6 @@ RUN rm -rf /usr/local/tomcat/ROOT/ /usr/local/tomcat/docs/ /usr/local/tomcat/exa
 
 COPY tmp/server.xml /usr/local/tomcat/conf/server.xml
 
-
+ENV JAVA_OPTS="$JAVA_OPTS $JSSE_OPTS -Djava.security.egd=file:/dev/./urandom"
 
 
