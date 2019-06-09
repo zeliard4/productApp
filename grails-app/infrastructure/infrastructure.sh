@@ -46,8 +46,8 @@ app-grails-build(){
 ## Deploys Grails container
 ################################################################################################################################################
 app-grails-deploy(){
-    pi-backend-grails-build
-    pi-backend-grails-run
+    pi-grails-build
+    pi-grails-run
 }
 
 ################################################################################################################################################
@@ -58,11 +58,11 @@ app-grails-war-build(){
     CLEAN_CMD="./gradlew clean"
     $CLEAN_CMD
     WAR_CMD="/root/.sdkman/candidates/grails/3.3.10/bin/grails prod war"
-    echo -e "\e[32m\nRemoving backend war...\e[39m\n"
+    echo -e "\e[32m\nRemoving grails war...\e[39m\n"
     rm -rf $APP_TARGET_WAR/*
-    echo -e "\e[32m\nBuilding backend Grails war...\e[39m\n"
+    echo -e "\e[32m\nBuilding Grails app war...\e[39m\n"
     $WAR_CMD
-    echo -e "\e[32m\nBuilt backend Grails war.\e[39m\n"
+    echo -e "\e[32m\nBuilt Grails app war.\e[39m\n"
 }
 
 ################################################################################################################################################
@@ -71,7 +71,7 @@ app-grails-war-build(){
 app-grails-war-deploy(){
     if ! docker exec -td grails bash -c "source /var/productApp/grails-app/infrastructure/infrastructure.sh; app-grails-war-build"
         then
-            echo -e "\e[91m\nGrails backend war build failed!\n"
+            echo -e "\e[91m\nGrails war build failed!\n"
             return
     fi
 }
