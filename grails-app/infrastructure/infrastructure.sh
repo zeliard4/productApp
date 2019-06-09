@@ -20,12 +20,12 @@ APP_TARGET_WAR=$INFRASTRUCTURE_ROOTPATH/sources/war
 ################################################################################################################################################
 app-dependencies(){
     echo -e "\e[32m\nInstalling dependencies ... \e[39m\n"
-    apt-get purge docker lxc-docker docker-engine docker.io
-    apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+    apt-get -y purge docker lxc-docker docker-engine docker.io
+    apt-get -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common
     curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable"
-    apt-get update
-    apt-get install docker-ce
+    apt-get -y update
+    apt-get -y install docker-ce
     echo -e "\n\e[32mInstalled dependencies!\e[39m\n"
 }
 
