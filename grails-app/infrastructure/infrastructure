@@ -73,7 +73,7 @@ app-grails-war-build(){
 ################################################################################################################################################
 app-grails-war-deploy(){
     cd $INFRASTRUCTURE_ROOTPATH
-    if ! docker exec -ti grails bash -c "source /var/productApp/grails-app/infrastructure/infrastructure.sh; app-grails-war-build"
+    if ! docker exec -ti grails bash -c "source /var/productApp/grails-app/infrastructure/infrastructure; app-grails-war-build"
         then
             echo -e "\e[91m\nGrails war build failed!\n"
             return
